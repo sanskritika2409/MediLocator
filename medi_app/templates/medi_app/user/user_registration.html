@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>registration form</title>
+    {% include 'medi_app/common/common_css.html'  %}
+</head>
+<style>
+    
+.bg{
+      background-image: url("{%static 'medi_app/images/fbg12.jpeg'%}");
+      
+     }
+</style>
+<body class="bg page-user-auth">
+    {% if messages  %}
+
+{% for m in messages   %}
+
+
+
+<!-- <h1 style = "margin-top: 70px;">{{m}}</h1> -->
+ <div class="alert alert-danger alert-dismissible fade show mx-auto text-center" role="alert" style="width: 50%; margin-top: 50px;">
+  <strong>{{m}}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+{% endfor %}
+
+
+{% endif %}
+
+    
+   <div class="main-div">
+    <!-- header code include here -->
+  {% include 'medi_app/common/header.html' %}
+<div class="w-50 text-center mx-auto mt-5">
+    <h2 style="font-family: zico display inline;font-size:40px;color: black; font-weight: 600;">User Registration Form</h2>
+</div>
+
+
+<!-- div for form  code start-->
+ <div class=" mx-auto  " style="height: 500px;border-radius: 10px; width:26%; padding:10px;background-color: rgba(125, 119, 119, 0.453);">
+
+   <form method="post" action="/reg/" enctype="multipart/form-data">
+    {% csrf_token  %}
+      <div class="mb-3">
+        <label for="email" class="form-label"> <i class="fa-solid fa-envelope"></i>Enter Email</label>
+        <input type="email" class="form-control" required placeholder="Enter your email" name="email">
+
+    </div>
+
+<div class="mb-3">
+        <label for="password" class="form-label ">
+            <i class="fa-solid fa-lock"></i> Enter Password </label>
+        <input type="password" class="form-control" required placeholder="Enter your password" name="password">
+
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label ">
+            <i class="fa-solid fa-user" ></i> Enter Name </label>
+        <input type="name" class="form-control" required placeholder="Enter your name" name="name">
+
+    </div>
+
+
+    <div class="mb-3">
+        <label for="phone no." class="form-label ">
+            <i class="fa-solid fa-phone"></i> Enter Phone number</label>
+        <input type="number" class="form-control" required placeholder="Enter your phone no." name="phone">
+
+    </div>
+
+    <div class="mb-3">
+        <label for="pic" class="form-label ">
+           <i class="fa-solid fa-image-portrait"></i> Enter Pic </label>
+        <input type="file" class="form-control" required placeholder="Enter your pic" name="profile_pic">
+
+    </div>
+
+<div class="text-center">
+    <button class ="btn btn-success">Submit</button> </div> 
+
+</div>
+</div>
+    
+
+
+
+
+
+
+
+  {% include 'medi_app/common/footer.html' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>  
+
+</body>
+</html>

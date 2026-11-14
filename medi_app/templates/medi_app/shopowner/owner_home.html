@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    {% include 'medi_app/common/common_css.html'  %}
+</head>
+<style>
+  .bg{
+      background-image: url("{%static 'medi_app/images/fbg15.jpeg'%}");
+      
+     }
+
+   .profile-div{
+
+    width: 30%;
+    height: 350px;
+  background-color:rgb(240, 201, 207);
+    margin: auto;
+    margin-top: 100px;
+    border: 2px solid rgba(129, 127, 127, 0.153);
+    border-radius: 10%;
+    padding: 20px;
+
+   }
+
+   .profile-img{
+    width:25% ;
+    height: 100px;
+    background-color: rgb(175, 228, 228);
+    border-radius: 50%;
+    margin-left: 30%;
+    margin-bottom: 20px;
+
+
+
+
+   }
+   h4{
+    color: black;
+    font-family: 'Gill Sans';
+    text-align: center;
+    line-height: 30px;
+
+
+
+   }
+
+    </style>
+<body class="bg page-owner">
+
+     <div class="main-div">
+            <!-- header code include here -->
+  {% include 'medi_app/shopowner/owner_header.html' %}
+    {% if messages  %}
+
+{% for m in messages   %}
+
+
+
+<!-- <h1 style = "margin-top: 70px;">{{m}}</h1> -->
+ <div class="alert alert-danger alert-dismissible fade show mx-auto text-center" role="alert" style="width: 50%; margin-top: 50px;">
+  <strong>{{m}}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+{% endfor %}
+
+
+{% endif %}
+
+  
+ 
+<div class="profile-div">
+      <img src="/media/{{owner_info.pic_name}}" alt="" class="profile-img">
+
+      <!-- callingg data -->
+
+      <h4>Hello:{{owner_info.name}}</h4>
+      <h4>Email:{{owner_info.email}}</h4>
+      <h4>PhoneNumber:{{owner_info.phone}}</h4>
+       
+      </div>
+
+
+
+
+    
+
+
+
+
+
+</div>
+
+  {% include 'medi_app/common/footer.html' %}
+
+  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>  
+
+</body>
+</html>

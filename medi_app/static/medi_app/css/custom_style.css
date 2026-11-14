@@ -1,0 +1,15 @@
+
+html,body{
+    min-height: 100vh;
+    /* vh is viewport height */
+    display: flex;
+    flex-direction: column;
+}
+
+
+.main-div{
+
+    flex: 1;
+    /* flex :1 means if content is more body expands and if less body will shrink so shrtcut is flex 1 for both functions */
+
+}

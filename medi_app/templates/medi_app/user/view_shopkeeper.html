@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    {% include 'medi_app/common/common_css.html'  %}
+    </head>
+    <style>   .bg{
+      background-image: url("{%static 'medi_app/images/bg8.jpeg'%}");
+     }</style>
+<body class="bg page-user">
+
+ 
+  {% include 'medi_app/user/user_header.html' %}
+  <div class="main-div">
+            <!-- header code include here -->
+
+     <h1 style="margin-top: 100px; margin-left: 38%; text-decoration: underline;">🔍Search shopkeeper </h1>
+</div>
+
+
+  {% include 'medi_app/common/footer.html' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>  
+
+</body>
+</html>

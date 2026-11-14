@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    {% include 'medi_app/common/common_css.html'  %}
+</head>
+<style>
+  .bg{
+      background-image: url("{%static 'medi_app/images/fbg16.jpeg'%}");
+      
+     }
+</style>
+<body class="bg page-owner-auth">
+
+     <div class="main-div">
+            <!-- header code include here -->
+  {% include 'medi_app/common/header.html' %}
+  <!-- <img src="{%static 'medi_app/images/login.gif'   %} " style="margin-left: 45%; margin-top: 20px;"  alt=""> -->
+   {% if messages  %}
+
+{% for m in messages   %}
+
+
+
+<!-- <h1 style = "margin-top: 70px;">{{m}}</h1> -->
+ <div class="alert alert-danger alert-dismissible fade show mx-auto text-center" role="alert" style="width: 50%; margin-top: 50px;">
+  <strong>{{m}}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+{% endfor %}
+
+
+{% endif %}
+
+    
+<div class="w-50 text-center mx-auto mt-5">
+    <h2 style="font-size:40px;color: black; font-weight: 600; margin-top: 100px;">Owner Login Form</h2>
+</div>
+
+
+<!-- div for form  code start-->
+ <div class=" mx-auto  " style="height: 250px;border-radius: 10px; width:26%; padding:10px;background-color: rgba(125, 119, 119, 0.304);">
+
+   <form action="/owner_login/" method="post">
+    {% csrf_token   %}
+      <div class="mb-3">
+        <label for="email" class="form-label "> <i class="fa-solid fa-envelope"></i>Enter Email</label>
+        <input type="email" class="form-control" required placeholder="Enter your email" name="owner_email">
+
+    </div>
+
+<div class="mb-3">
+        <label for="password" class="form-label ">
+            <i class="fa-solid fa-lock"></i> Enter Password</label>
+        <input type="password" class="form-control" required placeholder="Enter your password" name="owner_pass">
+
+    </div>
+
+<div class="text-center">
+    <button class ="btn btn-success">Submit</button>
+
+
+</div>    
+
+
+
+
+  </form>
+
+
+
+ </div>
+
+
+
+
+
+<!-- div for form  code end-->
+    
+
+
+
+
+
+</div>
+
+  {% include 'medi_app/common/footer.html' %}
+
+  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>  
+
+</body>
+</html>

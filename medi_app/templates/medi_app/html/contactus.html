@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>contact us</title>
+    {% include 'medi_app/common/common_css.html'   %}
+<style>
+
+  
+.reg-form{
+      /* background-color: rgb(175, 243, 186); */
+      margin-right: 20%;
+      height: 300px;
+      
+       /* border: 5px solid palevioletred;  */
+      /*  wsc  */
+       border-radius: 20px;
+     margin-top: 2px;
+     margin-bottom: 10px;
+    width: 30%;
+   margin-left: 32%;
+/* box-shadow: -5px -5px 15px 10px rgb(206, 204, 240); for reverse */
+   /* box-shadow: 0px 0px 15px 10px rgba(242, 155, 155, 0.592);   */
+    background: rgba(255, 255, 255, 0.2);
+     backdrop-filter: blur(90px); 
+    -webkit-backdrop-filter: blur(90px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px; padding: 20px;
+    color: white;
+     }
+     .bg{
+      background-image: url("{%static 'medi_app/images/fbg18.jpeg'%}");
+     }
+    circle{
+            width: 20%;
+            height: 50vh;
+            background-color: aqua;
+            border-radius:50%;
+            margin:auto;
+    }    
+    .w-100{
+
+      height:50vh;
+     } 
+
+</style>
+</head>
+<body class="bg page-contact">
+   {% if messages  %}
+
+{% for m in messages   %}
+
+
+
+<!-- <h1 style = "margin-top: 70px;">{{m}}</h1> -->
+ <div class="alert alert-danger alert-dismissible fade show mx-auto text-center" role="alert" style="width: 50%; margin-top: 50px;">
+  <strong>{{m}}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+{% endfor %}
+
+
+{% endif %}
+
+    <div class="main-div">
+  {% include 'medi_app/common/header.html' %}
+    
+
+    <div  >
+      
+<div class="circle">
+    <img src="{% static 'medi_app/images/contact.jpg' %}" alt=" " style="width: 300px; height:200px ;border-radius: 50% ; margin-left: 36%;" >
+</div> 
+
+
+      <!-- style="width: 50%; height: 600px; background-color: rgb(235, 193, 235); margin-left: 25%; margin-top: 50px;" -->
+   
+    <h2 style="margin-left: 33%;  margin-top:40px; font-family: zico display inline;font-size:35px;color: black; font-weight: 600;" >FEEL FREE TO CONTACT US</h2>
+  </div>
+    <br>
+ <!-- <span style="color:white; margin-left: 38%; font-size: 30px; text-decoration: underline;" >Contact Us.. </span> -->
+ 
+
+   <!-- form code starts      -->
+<div class=" reg-form">
+    <form action="/contact/" method="post">
+      {% csrf_token %}
+
+     <div class="input-group mb-3">
+     <span class="input-group-text" ><i class="fa-solid fa-user" style="color:black;"></i></span>
+     <input type="text" class="form-control" placeholder="name" name="name" required>
+     </div>
+
+      
+     
+     <div class="input-group mb-3">
+     <span class="input-group-text" ><i class="fa-solid fa-envelope"></i></span>
+     <input type="email" class="form-control" placeholder="email" name="email" required>
+     </div>
+
+
+     <div class="input-group mb-3">
+     <span class="input-group-text" ><i class="fa-solid fa-phone"></i></span>
+     <input type="number" class="form-control" placeholder="phone" name="phone" required>
+     </div>
+
+
+     <div class="input-group mb-3">
+     <span class="input-group-text" ><i class="fa-solid fa-clipboard-question"></i></span>
+     <input type="text" class="form-control" placeholder="question" name="question" required>
+     </div>
+     
+     <div class="text-center">
+        <button class="btn btn-success">Submit</button>
+      </div>
+
+<div></div>
+   
+
+    
+    </form>
+
+</div>    
+ 
+
+ 
+   <!-- form code ends      -->
+
+</div>  
+   <!-- footer code included here -->
+    
+{% include 'medi_app/common/footer.html' %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>  
+
+</body>
+</html>
