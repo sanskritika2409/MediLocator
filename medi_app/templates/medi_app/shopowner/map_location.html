@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>User Locations Map</title>
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     {%include 'medi_app/common/common_css.html'%}
     <!-- Google Fonts for nice font styles -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         /* Basic reset and global styles */
-      
+
         h1 {
             text-align: center;
             margin-top: 100px;
@@ -118,22 +119,20 @@
 
     {%include 'medi_app/shopowner/owner_header.html'%}
 
-   
-
     <div class="container">
         <h1></h1>
 
         <!-- Search bar and button -->
         <div class="search-container">
             <input type="text" id="search" placeholder="Search for a location..." />
-            <button id="search-button">Search</button>
+            <button id="search-button" type="button">Search</button>
         </div>
 
         <!-- Form to send the coordinates -->
-        <form method="POST" action="/map_location/" >
+        <form method="POST" action="/map_location/">
             {% csrf_token %}
-            <input type="text"  id="long" name="longitude">
-            <input type="text"  id="lat" name="lat">
+            <input type="text" id="long" name="longitude" placeholder="Longitude" readonly required>
+            <input type="text" id="lat" name="lat" placeholder="Latitude" readonly required>
             <div class="form-container">
                 <button class="btn btn-danger">submit</button>
             </div>
@@ -144,7 +143,7 @@
     </div>
 
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         var marker;
         var clickedLat;
@@ -154,60 +153,77 @@
 
         var map = L.map('map').setView([20.5937, 78.9629], 5); // Centered on India, adjust as necessary
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // OpenStreetMap tiles need a Referer header; fall back to CARTO if still blocked
+        var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
+            referrerPolicy: 'strict-origin-when-cross-origin',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        var tileErrors = 0, usingFallback = false;
+        osmLayer.on('tileerror', function () {
+            tileErrors++;
+            if (tileErrors >= 4 && !usingFallback) {
+                usingFallback = true;
+                map.removeLayer(osmLayer);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                    subdomains: 'abcd',
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                }).addTo(map);
+            }
+        });
+        setTimeout(function () { map.invalidateSize(); }, 300);
+        window.addEventListener('resize', function () { map.invalidateSize(); });
+
+        // Click anywhere on the map to place the shop marker
+        map.on('click', function (e) {
+            clickedLat = e.latlng.lat;
+            clickedLng = e.latlng.lng;
+
+            // Remove the existing marker if it exists
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            // Add a new marker
+            marker = L.marker([clickedLat, clickedLng]).addTo(map)
+                .bindPopup('Your shop location')
+                .openPopup();
+
+            long.value = clickedLng;
+            lati.value = clickedLat;
+        });
+
         // Function to search for a location
-        document.getElementById('search-button').addEventListener('click', function() {
-            var query = document.getElementById('search').value;
+        function searchLocation() {
+            var query = document.getElementById('search').value.trim();
+            if (!query) {
+                alert('Please type a location to search.');
+                return;
+            }
             var url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query);
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
+            fetch(url, { referrerPolicy: 'strict-origin-when-cross-origin' })
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
                     if (data.length > 0) {
-                        // Get the first result
+                        // Move the map to the first result
                         var result = data[0];
-                        var lat = result.lat;
-                        var lon = result.lon;
-
-                        // Move the map to the new location
-                        map.setView([lat, lon], 13);
-
-                        // Clear previous markers (if any)
-                        map.eachLayer(function(layer) {
-                            if (layer instanceof L.Marker) {
-                                map.removeLayer(layer);
-                            }
-                        });
-
-                        // Add click event on the map to place a marker
-                        map.on('click', function(e) {
-                            clickedLat = e.latlng.lat;
-                            clickedLng = e.latlng.lng;
-
-                            // Remove the existing marker if it exists
-                            if (marker) {
-                                map.removeLayer(marker);
-                            }
-
-                            // Add a new marker
-                            marker = L.marker([clickedLat, clickedLng]).addTo(map)
-                                .bindPopup('You are here!')
-                                .openPopup();
-
-                            console.log(clickedLat, clickedLng);
-                            long.value = clickedLng;
-                            lati.value = clickedLat;
-                        });
+                        map.setView([result.lat, result.lon], 15);
                     } else {
                         alert('Location not found. Please try again.');
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(function (error) { console.error('Error:', error); });
+        }
+
+        document.getElementById('search-button').addEventListener('click', searchLocation);
+        document.getElementById('search').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchLocation();
+            }
         });
     </script>
 
